@@ -18,7 +18,18 @@ class Manager:
                 if wrong_attempts == 3:
                     print("You've entered the wrong password three times and have been locked out.")
                     self.program_running = False
+    
+    def add_entry(self, site, username, password):
+        entry = f"""\n{site} = username: "{username}", password: "{password}" """
+        secrets = open("secrets.txt", "a")
+        secrets.write(entry)
 
 manager = Manager()
 
 manager.master_password()
+
+site = input("Enter the site: ")
+username = input("Enter the username: ")
+password = input("Enter the password: ")
+
+manager.add_entry(site, username, password)
