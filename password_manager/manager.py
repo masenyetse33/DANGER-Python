@@ -12,8 +12,9 @@ class Manager:
                 self.program_running = True
                 break
             else:
-                print("Wrong Password. Try again.")
                 wrong_attempts += 1
+                if wrong_attempts <= 2:
+                    print("Wrong Password. Try again.")
                 if wrong_attempts == 3:
                     print("You've entered the wrong password three times and have been locked out.")
                     self.program_running = False
