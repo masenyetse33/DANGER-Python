@@ -1,3 +1,5 @@
+import re
+
 class Manager:
     def __init__(self, password = "password9", program_running = False):
         self.password = password
@@ -19,10 +21,27 @@ class Manager:
                     print("You've entered the wrong password three times and have been locked out.")
                     self.program_running = False
     
+    def get_websites(self):
+        try:
+            with open("secrets.txt", "r", encoding="utf-8") as f:
+                text = f.read()
+            websites = re.findall(r'(?:^|\s)(\S*?\.com\S*?)(?=\s|$)', text)
+            return websites
+        except FileNotFoundError:
+            return []
+    
     def add_entry(self, site, username, password):
-        entry = f"""\n{site} = username: "{username}", password: "{password}" """
-        secrets = open("secrets.txt", "a")
-        secrets.write(entry)
+
+        existing_websites = self.get_websites()
+
+        if site in existing_websites:
+            print("That website has already been registered.")
+            return
+        else:
+            entry = f"""\n{site} = username: "{username}", password: "{password}" """
+            with open("secrets.txt", "a") as secrets:
+                secrets.write(entry)
+        
 
 manager = Manager()
 
