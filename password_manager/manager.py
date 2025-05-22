@@ -1,9 +1,8 @@
-entries = {}
-
 class Manager:
     def __init__(self, master_password = "password9", program_running = False):
         self.master_password = master_password
         self.program_running = program_running
+        self.entries = {}
     
     def check_master_password(self):
         wrong_attempts = 0
@@ -22,42 +21,38 @@ class Manager:
                     self.program_running = False
     
     def add_entry(self, site, username, password):
-        entries[site] = username, password
+        self.entries[site] = username, password
         entry = f"""\n{site} = username: "{username}", password: "{password}" """
         with open("secrets.txt", "a") as secrets:
             secrets.write(entry)
         print("Entry added succesfuly.")
     
     def get_entry(self, site):
-        for key in entries:
-            if key == site:
-                value = entries[site]
-                print(value)
-            else:
-                print("Site not found.")
+        if site in self.entries:
+            value = self.entries[site]
+            print(value)
+        else:
+            print("Site not found.")
     
     def update_entry(self, site, new_username, new_password):
-        for key in entries:
-            if key == site:
-                entries[key] = new_username, new_password
-                print("Entry updated succesfully.")
-            else:
-                print("That site has not been registered before.")
+        if site in self.entries:
+            self.entries[site] = new_username, new_password
+            print("Entry updated succesfully.")
+        else:
+            print("That site has not been registered before.")
     
     def delete_entry(self, site):
-        for key in entries:
-            if key == site:
-                del entries[key]
-                print("Entry deleted succesfully.")
-                break
-            else:
-                print("That site does not exist.")
+        if site in self.entries:
+            del self.entries[site]
+            print("Entry deleted succesfully.")
+        else:
+            print("That site does not exist.")
     
     def list_entries(self):
-        if len(entries) == 0:
+        if len(self.entries) == 0:
             print("There are no entries.")
         else:
-            print(entries)
+            print(self.entries)
 
 manager = Manager()
 
